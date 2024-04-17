@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSS Okuma</title>
+</head>
+<body>
+<pre id="rss-feed"></pre>
+
+<script>
+// RSS dosyasının URL'si
+var rssFeedUrl = "http://aksehirportal.rf.gd/rss/category/Son";
+
+// RSS içeriğini al ve işle
+fetch(rssFeedUrl)
+  .then(response => response.text())
+  .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+  .then(data => {
+    // XML içeriğini alıp <pre> etiketi içine yerleştir
+    var rssFeedDiv = document.getElementById("rss-feed");
+    rssFeedDiv.innerText = (new XMLSerializer()).serializeToString(data);
+  })
+  .catch(err => {
+    console.error('Fetch Error:', err);
+    document.getElementById("rss-feed").innerText = "RSS okunamadı.";
+  });
+</script>
+</body>
+</html>
