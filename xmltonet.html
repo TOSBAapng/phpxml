@@ -6,7 +6,7 @@
 <title>RSS Okuma</title>
 </head>
 <body>
-<pre id="rss-feed"></pre>
+<div id="rss-feed"></div>
 
 <script>
 // RSS dosyasının URL'si
@@ -17,9 +17,17 @@ fetch(rssFeedUrl)
   .then(response => response.text())
   .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
   .then(data => {
-    // XML içeriğini alıp <pre> etiketi içine yerleştir
+    // XML içeriğini işle ve HTML içine yerleştir
+    var rssItems = data.querySelectorAll("item");
     var rssFeedDiv = document.getElementById("rss-feed");
-    rssFeedDiv.innerText = (new XMLSerializer()).serializeToString(data);
+    var html = "<ul>";
+    rssItems.forEach(item => {
+      var title = item.querySelector("title").textContent;
+      var link = item.querySelector("link").textContent;
+      html += "<li><a href='" + link + "'>" + title + "</a></li>";
+    });
+    html += "</ul>";
+    rssFeedDiv.innerHTML = html;
   })
   .catch(err => {
     console.error('Fetch Error:', err);
