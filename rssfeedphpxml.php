@@ -6,9 +6,9 @@ $url = "http://aksehirportal.rf.gd/rss/category/Son";
 $xml = simplexml_load_file($url);
 
 // XML başlığını belirle
-header('Content-type: text/xml');
+header('Content-type: application/rss+xml');
 
-// XML dosyasının başlangıcı
+// RSS başlığını yazdır
 echo "<?xml version='1.0' encoding='UTF-8'?>
 <rss version='2.0'>
 <channel>
@@ -19,14 +19,14 @@ echo "<?xml version='1.0' encoding='UTF-8'?>
 // RSS içeriğini döngüye alarak XML dosyasına ekleyin
 foreach ($xml->channel->item as $item) {
     echo "<item>
-    <title>" . $item->title . "</title>
-    <description>" . $item->description . "</description>
-    <link>" . $item->link . "</link>
-    <pubDate>" . $item->pubDate . "</pubDate>
+    <title>" . htmlspecialchars($item->title) . "</title>
+    <description>" . htmlspecialchars($item->description) . "</description>
+    <link>" . htmlspecialchars($item->link) . "</link>
+    <pubDate>" . htmlspecialchars($item->pubDate) . "</pubDate>
     </item>";
 }
 
-// XML dosyasının sonu
+// RSS dosyasının sonu
 echo "</channel>
 </rss>";
 ?>
